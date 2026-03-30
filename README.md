@@ -5,7 +5,7 @@ Access the paper at: https://doi.org/10.1016/j.jaap.2022.105683
 
 # Kinetic Monte Carlo Simulation: Polystyrene Pyrolysis and Depolymerization
 
-This repository contains the Python source code for a Kinetic Monte Carlo (KMC) simulation focused on describing the thermal degradation, pyrolysis, and depolymerization processes of polystyrene (PSty).
+This repository contains the Python and Jupyter Notebook source code for a Kinetic Monte Carlo (KMC) simulation focused on describing the thermal degradation, pyrolysis, and depolymerization processes of polystyrene (PSty).
 
 ## 🧪 About the Project
 
@@ -13,12 +13,18 @@ The dynamic model simulates the step-by-step kinetic mechanism of plastic degrad
 
 ## 🗂 File Structure
 
-*(Note: Update the file names below to match your exact repository files if they differ)*
+This repository is organized into core simulation modules and interactive notebooks for executing specific case studies:
 
-This repository consists of the primary simulation files:
+**Execution & Case Studies (Jupyter Notebooks):**
+* **`Fig7_PS_500.ipynb`**: Simulation setup and execution for Polystyrene degradation at 500°C.
+* **`Fig8_PS_600.ipynb`**: Simulation setup and execution for Polystyrene degradation at 600°C.
+* **`Fig9_PS_700.ipynb`**: Simulation setup and execution for Polystyrene degradation at 700°C.
 
-* **`main.py`**: The central script. It establishes the initial polymer chain conditions, operating temperatures, and kinetic constants from the literature for the degradation events, executing the main stochastic simulation loop.
-* **`config.json`** (or equivalent parameters file): An auxiliary file or section containing the specific reaction probabilities, rate constants, and system control volume settings.
+**Core Modules (Python Scripts):**
+* **`McPackage.py` / `kMC_v2024.py` / `McPackage_ThermalInitiation.py`**: The core Kinetic Monte Carlo engine handling the stochastic simulation loop.
+* **`KineticConstantsPS.py`**: Contains the kinetic rate constants, activation energies, and temperature-dependent mathematical models from literature.
+* **`InitialDistribution.py`**: Establishes the initial conditions of the polymer chains (molecular weight, chain length distribution).
+* **`Fle.py` & `Sigmoide.py`**: Auxiliary scripts for specific mathematical functions and data handling.
 
 ## ⚙️ How the Algorithm Works
 
@@ -32,31 +38,44 @@ The mathematical logic bypasses continuous deterministic equations and relies on
 ## 🚀 How to Run
 
 **Prerequisites:**
-Ensure you have Python 3 installed in your environment, along with standard scientific libraries:
+Ensure you have Python 3 installed in your environment. Since the core engine relies on Just-In-Time (JIT) compilation for performance, you must install `numba` along with the standard scientific libraries and Jupyter:
+
 ```bash
-pip install numpy matplotlib
+pip install numpy matplotlib numba jupyter
 ```
+
 Step-by-step:
 
-Clone this repository to your local machine.
+Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/gaappucrio/PSty-Despolymerization.git
+git clone [https://github.com/gaappucrio/PSty-Despolymerization.git](https://github.com/gaappucrio/PSty-Despolymerization.git)
 ```
-Navigate to the project's root folder.
 
-Run the simulator in your terminal:
+Navigate to the project's root folder:
 
 ```bash
-python main.py
-The computational time may vary depending on your machine's hardware and the initial polymer chain lengths defined in the simulation.
+cd PSty-Despolymerization
 ```
+
+Launch Jupyter Notebook:
+
+```bash
+jupyter notebook
+```
+
+Run a Simulation:
+Once the Jupyter interface opens in your browser, click on one of the execution files (e.g., Fig7_PS_500.ipynb). Inside the notebook, click "Run All" (or run the cells sequentially) to start the Monte Carlo simulation.
+
+⏳ Note: The computational time may vary significantly depending on your machine's hardware, the chosen temperature, and the initial polymer chain lengths. The numba library will compile the functions on the first run, which may take a few extra seconds.
 
 📊 Understanding the Outputs
-After the routine finishes, the script automatically exports data files (e.g., .txt or .csv) to the same directory containing raw data ready for plotting or statistical analysis. Outputs typically include:
+The outputs are directly plotted and visualized within the Jupyter Notebooks. The execution cells will generate graphs and arrays representing:
 
-degradation_profile.txt: Main data table. It lists the time progression and the overall fractional mass loss of the polystyrene.
+The time progression and overall fractional mass loss of the polystyrene.
 
-product_yields.txt: Tracks the specific quantities and mass fractions of generated volatiles (styrene, dimers, trimers).
+The specific quantities and mass fractions of generated volatiles (styrene monomers, dimers, trimers, etc.).
 
-molecular_weight.txt: Records the evolution of the remaining polymer's properties, including the number-average molecular weight (Mn) and the polydispersity index (PDI) over time.
+The evolution of the remaining polymer's properties (Mn, Mw, and PDI) over time.
+
+High-resolution figures (e.g., .jpeg files) are automatically saved to your directory upon cell completion.
